@@ -20,23 +20,26 @@
             border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-        h1 {
+        .logo-container {
             text-align: center;
-            color: #d97706;
-            margin-top: 5px;
-            margin-bottom: 2px;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        .logo-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .subtitle {
             text-align: center;
             color: #b45309;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-top: -2px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 5px;
             margin-bottom: 25px;
             letter-spacing: 0.5px;
-            opacity: 0.9;
         }
         .section-title {
             font-size: 1.25rem;
@@ -85,7 +88,9 @@
 <body>
 
 <div class="container">
-    <h1>BALKAN CAFE</h1>
+    <div class="logo-container">
+        <img src="logo.png" alt="Balkan Cafe Logo" class="logo-img">
+    </div>
     <div class="subtitle">Bittimi Bitmedi</div>
 
     <div class="section-title">Sıcak İçecekler</div>
