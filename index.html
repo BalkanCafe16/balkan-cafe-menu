@@ -47,10 +47,79 @@
             font-size: 0.8rem;
             font-weight: 500;
             margin-top: -2px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             letter-spacing: 0.5px;
             opacity: 0.9;
         }
+
+        /* Wİ-Fİ VE İNSTAGRAM KARTLARI */
+        .info-cards-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .info-card {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            flex: 1;
+            min-width: 220px;
+            max-width: 280px;
+        }
+
+        .info-card-icon {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fef3c7;
+            border-radius: 50%;
+            color: #d97706;
+            flex-shrink: 0;
+        }
+
+        .info-card-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-card-title {
+            font-size: 0.7rem;
+            color: #92400e;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .info-card-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-top: 1px;
+        }
+
+        .instagram-link {
+            text-decoration: none;
+            color: inherit;
+            flex: 1;
+            min-width: 220px;
+            max-width: 280px;
+            transition: transform 0.2s ease;
+        }
+
+        .instagram-link:hover {
+            transform: translateY(-2px);
+        }
+
         .section-title {
             font-size: 1.25rem;
             font-weight: 700;
@@ -113,6 +182,42 @@
 
     <h1>BALKAN CAFE</h1>
     <div class="subtitle">Bittimi Bitmedi</div>
+
+    <!-- Wİ-Fİ VE İNSTAGRAM BİLGİ KARTLARI -->
+    <div class="info-cards-container">
+        <!-- Wi-Fi Şifresi Kartı -->
+        <div class="info-card">
+            <div class="info-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                    <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                    <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+            </div>
+            <div class="info-card-content">
+                <span class="info-card-title">Wi-Fi Ağ & Şifre</span>
+                <span class="info-card-value">BalkanCafe / 16161616</span>
+            </div>
+        </div>
+
+        <!-- Instagram Kartı -->
+        <a href="https://instagram.com/balkancafe16" target="_blank" class="instagram-link">
+            <div class="info-card">
+                <div class="info-card-icon" style="background-color: #fce7f3; color: #db2777;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </div>
+                <div class="info-card-content">
+                    <span class="info-card-title">Instagram'da Takip Et</span>
+                    <span class="info-card-value">@balkancafe16</span>
+                </div>
+            </div>
+        </a>
+    </div>
 
     <div class="section-title">Sıcak İçecekler</div>
     <div class="menu-item"><span class="item-name">Çay</span><span class="item-price">40 ₺</span></div>
