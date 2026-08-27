@@ -52,7 +52,7 @@
             opacity: 0.9;
         }
 
-        /* Wİ-Fİ, İNSTAGRAM VE GOOGLE KARTLARI */
+        /* Wİ-Fİ VE İNSTAGRAM KARTLARI */
         .info-cards-container {
             display: flex;
             gap: 10px;
@@ -71,7 +71,8 @@
             gap: 10px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
             flex: 1;
-            min-width: 160px;
+            min-width: 220px;
+            max-width: 280px;
         }
 
         .info-card-icon {
@@ -104,26 +105,19 @@
             font-weight: 600;
             color: #1f2937;
             margin-top: 1px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
-        .card-link {
+        .instagram-link {
             text-decoration: none;
             color: inherit;
             flex: 1;
-            min-width: 160px;
+            min-width: 220px;
+            max-width: 280px;
             transition: transform 0.2s ease;
         }
 
-        .card-link:hover {
+        .instagram-link:hover {
             transform: translateY(-2px);
-        }
-
-        .stars {
-            color: #f59e0b;
-            font-size: 0.8rem;
         }
 
         .section-title {
@@ -189,7 +183,7 @@
     <h1>BALKAN CAFE</h1>
     <div class="subtitle">Bittimi Bitmedi</div>
 
-    <!-- Wİ-Fİ, İNSTAGRAM VE GOOGLE BİLGİ KARTLARI -->
+    <!-- Wİ-Fİ VE İNSTAGRAM BİLGİ KARTLARI -->
     <div class="info-cards-container">
         <!-- Wi-Fi Şifresi Kartı -->
         <div class="info-card">
@@ -202,13 +196,13 @@
                 </svg>
             </div>
             <div class="info-card-content">
-                <span class="info-card-title">Wi-Fi Şifresi</span>
+                <span class="info-card-title">Wi-Fi Ağ Şifre</span>
                 <span class="info-card-value">Balkancafe1234</span>
             </div>
         </div>
 
         <!-- Instagram Kartı -->
-        <a href="https://instagram.com/balkancafe16" target="_blank" class="card-link">
+        <a href="https://instagram.com/balkancafe16" target="_blank" class="instagram-link">
             <div class="info-card">
                 <div class="info-card-icon" style="background-color: #fce7f3; color: #db2777;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -218,11 +212,13 @@
                     </svg>
                 </div>
                 <div class="info-card-content">
-                    <span class="info-card-title">Instagram</span>
+                    <span class="info-card-title">Instagram'da Takip Et</span>
                     <span class="info-card-value">@balkancafe16</span>
                 </div>
             </div>
         </a>
+    </div>
+
     <div class="section-title">Sıcak İçecekler</div>
     <div class="menu-item"><span class="item-name">Çay</span><span class="item-price">40 ₺</span></div>
     <div class="menu-item"><span class="item-name">Büyük Fincan Çay</span><span class="item-price">80 ₺</span></div>
