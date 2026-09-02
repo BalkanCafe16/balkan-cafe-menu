@@ -278,21 +278,6 @@
             font-weight: bold;
         }
 
-        /* ZİYARETÇİ SAYAÇ ROZETİ STİLİ */
-        .visitor-counter-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #fef3c7;
-            color: #92400e;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-top: 6px;
-            border: 1px solid #fde68a;
-        }
-
         .category-tabs {
             display: flex;
             gap: 6px;
@@ -1160,13 +1145,6 @@
             <span lang="en">What Should I Pick?</span>
         </h3>
 
-        <!-- GİRİŞ SAYAÇ ROZETİ (ID: ziyaret-sayaci İLE EŞLEŞTİRİLDİ) -->
-        <div class="visitor-counter-badge">
-            <span>👁️</span>
-            <span lang="tr">Toplam Ziyaret: <strong id="ziyaret-sayaci">...</strong></span>
-            <span lang="en">Total Visits: <strong id="ziyaret-sayaci-en">...</strong></span>
-        </div>
-
         <p style="font-size: 0.8rem; color: #6b7280; margin-top:8px;">
             <span lang="tr">Kategori seç ve çarkı çevir!</span>
             <span lang="en">Pick a category and spin!</span>
@@ -1191,27 +1169,6 @@
 </div>
 
 <script>
-    // İSTEDİĞİNİZ SAYAÇ FONKSİYONU VE ENTEGRASYONU
-    function ziyaretciSayisiniGetir() {
-        fetch('https://api.countapi.xyz/hit/balkancafe16-menu/visits')
-            .then(res => res.json())
-            .then(res => {
-                // Hem Türkçe hem İngilizce kısımdaki sayaç elemanına değeri aktarır
-                const counterElement = document.getElementById('ziyaret-sayaci');
-                const counterElementEn = document.getElementById('ziyaret-sayaci-en');
-                
-                if (counterElement) counterElement.innerText = res.value;
-                if (counterElementEn) counterElementEn.innerText = res.value;
-            })
-            .catch(err => {
-                console.error("Sayaç yüklenemedi:", err);
-                const counterElement = document.getElementById('ziyaret-sayaci');
-                const counterElementEn = document.getElementById('ziyaret-sayaci-en');
-                if (counterElement) counterElement.innerText = "1";
-                if (counterElementEn) counterElementEn.innerText = "1";
-            });
-    }
-
     // DİL YÖNETİMİ
     function setLanguage(lang) {
         const btnTr = document.getElementById('btn-tr');
@@ -1240,8 +1197,6 @@
         if (savedLang) {
             setLanguage(savedLang);
         }
-        // İlettiğiniz ziyaretçi sayacı fonksiyonunu tetikler
-        ziyaretciSayisiniGetir();
     });
 
     // ÇARK SİSTEMİ VERİLERİ
