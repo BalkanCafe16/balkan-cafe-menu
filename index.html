@@ -22,12 +22,40 @@
             position: relative;
         }
 
+        /* DİL SEÇİMİ VE ÇARK BUTONU KAPLATICISI */
+        .header-actions-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* ÇARK TETİKLEYİCİ BUTONU */
+        .wheel-trigger-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);
+            transition: all 0.2s ease;
+        }
+        .wheel-trigger-btn:hover {
+            transform: scale(1.03);
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+
         /* DİL SEÇİMİ BUTONLARI */
         .lang-switch-container {
             display: flex;
-            justify-content: flex-end;
             gap: 6px;
-            margin-bottom: 10px;
         }
         .lang-btn {
             background-color: #fef3c7;
@@ -223,6 +251,95 @@
             white-space: nowrap;
         }
 
+        /* ÇARK MODAL STİLLERİ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .wheel-card {
+            background: #fff;
+            width: 90%;
+            max-width: 420px;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .close-btn {
+            position: absolute; top: 12px; right: 18px;
+            font-size: 24px; cursor: pointer; color: #888;
+            font-weight: bold;
+        }
+        .category-tabs {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tab-btn.active {
+            background: #d97706;
+            color: #fff;
+            border-color: #b45309;
+        }
+        .wheel-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 10px auto;
+        }
+        .pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #dc2626;
+            z-index: 10;
+        }
+        canvas { width: 100%; height: 100%; border-radius: 50%; }
+        .spin-btn {
+            margin-top: 15px;
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 0.95rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 3px 8px rgba(5, 150, 105, 0.3);
+        }
+        .spin-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        .result-box {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 10px;
+            color: #065f46;
+        }
+
         /* DİL GİZLEME / GÖSTERME KURALLARI */
         [lang="en"] {
             display: none;
@@ -242,10 +359,20 @@
 <body>
 
 <div class="container">
-    <!-- DİL DEĞİŞTİRME BUTONLARI -->
-    <div class="lang-switch-container">
-        <button class="lang-btn active" id="btn-tr" onclick="setLanguage('tr')">TR 🇹🇷</button>
-        <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN 🇬🇧</button>
+    <!-- EYLEM BUTONLARI KAPLATICISI -->
+    <div class="header-actions-container">
+        <!-- ÇARK BUTONU -->
+        <button class="wheel-trigger-btn" onclick="toggleWheelModal(true)">
+            <span>🎡</span> 
+            <span lang="tr">Ne İçsem?</span>
+            <span lang="en">Spin Wheel</span>
+        </button>
+
+        <!-- DİL DEĞİŞTİRME BUTONLARI -->
+        <div class="lang-switch-container">
+            <button class="lang-btn active" id="btn-tr" onclick="setLanguage('tr')">TR 🇹🇷</button>
+            <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN 🇬🇧</button>
+        </div>
     </div>
 
     <!-- LOGO ALANI -->
@@ -1008,7 +1135,39 @@
     </div>
 </div>
 
+<!-- ÇARK MODAL ALANI -->
+<div class="modal-overlay" id="wheelModal">
+    <div class="wheel-card">
+        <span class="close-btn" onclick="toggleWheelModal(false)">&times;</span>
+        <h3 style="color:#b45309;">
+            <span lang="tr">Ne İçsem?</span>
+            <span lang="en">What Should I Drink?</span>
+        </h3>
+        <p style="font-size: 0.8rem; color: #6b7280; margin-top:4px;">
+            <span lang="tr">Kategori seç ve çarkı çevir!</span>
+            <span lang="en">Pick a category and spin!</span>
+        </p>
+        
+        <div class="category-tabs" id="categoryTabs"></div>
+
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <canvas id="wheelCanvas" width="260" height="260"></canvas>
+        </div>
+
+        <button class="spin-btn" id="spinBtn" onclick="spinWheel()">
+            <span lang="tr">Çevir!</span>
+            <span lang="en">Spin!</span>
+        </button>
+
+        <div class="result-box" id="resultBox">
+            <h4 id="resultText" style="margin: 0; font-size: 1rem;"></h4>
+        </div>
+    </div>
+</div>
+
 <script>
+    // DİL YÖNETİMİ
     function setLanguage(lang) {
         const btnTr = document.getElementById('btn-tr');
         const btnEn = document.getElementById('btn-en');
@@ -1024,15 +1183,166 @@
             btnEn.classList.remove('active');
             localStorage.setItem('selectedLang', 'tr');
         }
+        if (document.getElementById('wheelModal').classList.contains('active')) {
+            initTabs();
+            drawWheel();
+        }
     }
 
-    // Sayfa yüklendiğinde tercih edilen dili hatırla
     document.addEventListener('DOMContentLoaded', () => {
         const savedLang = localStorage.getItem('selectedLang');
         if (savedLang) {
             setLanguage(savedLang);
         }
     });
+
+    // ÇARK SİSTEMİ VERİLERİ (Menüdeki ürünlerden çekilmiştir)
+    const wheelData = {
+        hot: {
+            trName: "Sıcaklar", enName: "Hot Drinks",
+            items: [
+                { tr: "Çay", en: "Tea" },
+                { tr: "Türk Kahvesi", en: "Turkish Coffee" },
+                { tr: "Espresso", en: "Espresso" },
+                { tr: "Americano", en: "Americano" },
+                { tr: "Cappuccino", en: "Cappuccino" },
+                { tr: "Latte", en: "Latte" },
+                { tr: "Sıcak Çikolata", en: "Hot Chocolate" },
+                { tr: "Bitki Çayı", en: "Herbal Tea" },
+                { tr: "Sütlü Sahlep", en: "Sahlep" }
+            ]
+        },
+        cold: {
+            trName: "Soğuklar", enName: "Cold Drinks",
+            items: [
+                { tr: "Iced Latte", en: "Iced Latte" },
+                { tr: "Ev Yapımı Limonata", en: "Homemade Lemonade" },
+                { tr: "Iced Mocha", en: "Iced Mocha" },
+                { tr: "Iced Americano", en: "Iced Americano" },
+                { tr: "Frozen", en: "Frozen" },
+                { tr: "Cool Lime", en: "Cool Lime" },
+                { tr: "Berry Hibiscus", en: "Berry Hibiscus" },
+                { tr: "Milkshake", en: "Milkshake" },
+                { tr: "Churchill", en: "Churchill" }
+            ]
+        }
+    };
+
+    const sliceColors = ["#fef3c7", "#fde68a", "#f59e0b", "#d97706", "#b45309", "#78350f"];
+    let currentCategory = "hot";
+    let isSpinning = false;
+    let currentAngle = 0;
+
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function initTabs() {
+        const isEn = document.body.classList.contains('lang-en-active');
+        const tabsContainer = document.getElementById('categoryTabs');
+        tabsContainer.innerHTML = '';
+        Object.keys(wheelData).forEach(key => {
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${key === currentCategory ? 'active' : ''}`;
+            btn.innerText = isEn ? wheelData[key].enName : wheelData[key].trName;
+            btn.onclick = () => switchCategory(key);
+            tabsContainer.appendChild(btn);
+        });
+    }
+
+    function switchCategory(key) {
+        if (isSpinning) return;
+        currentCategory = key;
+        document.getElementById('resultBox').style.display = 'none';
+        initTabs();
+        drawWheel();
+    }
+
+    function drawWheel() {
+        const isEn = document.body.classList.contains('lang-en-active');
+        const items = wheelData[currentCategory].items;
+        const numSlices = items.length;
+        const sliceAngle = (2 * Math.PI) / numSlices;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        items.forEach((item, index) => {
+            const startAngle = index * sliceAngle + currentAngle;
+            const endAngle = startAngle + sliceAngle;
+
+            ctx.beginPath();
+            ctx.moveTo(130, 130);
+            ctx.arc(130, 130, 130, startAngle, endAngle);
+            ctx.closePath();
+            ctx.fillStyle = sliceColors[index % sliceColors.length];
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(130, 130);
+            ctx.rotate(startAngle + sliceAngle / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = (index % sliceColors.length > 2) ? "#ffffff" : "#1f2937";
+            ctx.font = "bold 11px -apple-system, BlinkMacSystemFont, Segoe UI";
+            const label = isEn ? item.en : item.tr;
+            ctx.fillText(label, 115, 4);
+            ctx.restore();
+        });
+    }
+
+    function spinWheel() {
+        if (isSpinning) return;
+        isSpinning = true;
+        document.getElementById('spinBtn').disabled = true;
+        document.getElementById('resultBox').style.display = 'none';
+
+        const items = wheelData[currentCategory].items;
+        const spinAngle = Math.floor(Math.random() * 360) + 1440;
+        const duration = 4000;
+        const start = performance.now();
+
+        function animate(time) {
+            const elapsed = time - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            
+            currentAngle = (spinAngle * easeOut * Math.PI) / 180;
+            drawWheel();
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                isSpinning = false;
+                document.getElementById('spinBtn').disabled = false;
+                showResult(items);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    function showResult(items) {
+        const isEn = document.body.classList.contains('lang-en-active');
+        const numSlices = items.length;
+        const sliceDegrees = 360 / numSlices;
+        const actualDegrees = (currentAngle * 180 / Math.PI) % 360;
+        const winningIndex = Math.floor((360 - (actualDegrees % 360) + 270) % 360 / sliceDegrees);
+        
+        const winner = isEn ? items[winningIndex].en : items[winningIndex].tr;
+        const resultText = isEn ? `Lucky Choice: ${winner}! 🍹` : `Şansına Çıkan: ${winner}! 🍹`;
+        
+        document.getElementById('resultText').innerText = resultText;
+        document.getElementById('resultBox').style.display = 'block';
+    }
+
+    function toggleWheelModal(show) {
+        document.getElementById('wheelModal').classList.toggle('active', show);
+        if (show) {
+            initTabs();
+            drawWheel();
+        }
+    }
 </script>
 
 </body>
