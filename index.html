@@ -1196,7 +1196,16 @@
         try {
             const response = await fetch(counterApiUrl);
             const data = await response.json();
-            const count = data ? data : 0;
+            
+            let count = 0;
+            if (typeof data === 'number') {
+                count = data;
+            } else if (data && typeof data === 'object' && data.count !== undefined) {
+                count = Number(data.count) || 0;
+            } else if (data && !isNaN(Number(data))) {
+                count = Number(data);
+            }
+
             document.getElementById('spinCountDisplay').innerText = count;
             return count;
         } catch (e) {
@@ -1209,11 +1218,13 @@
         try {
             const currentCount = await fetchSpinCount();
             const newCount = currentCount + 1;
+            
             await fetch(counterApiUrl, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newCount)
             });
+            
             document.getElementById('spinCountDisplay').innerText = newCount;
         } catch (e) {
             console.error("Sayaç güncellenemedi", e);
