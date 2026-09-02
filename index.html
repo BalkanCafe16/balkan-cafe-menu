@@ -278,7 +278,7 @@
             font-weight: bold;
         }
 
-        /* YENİ EKLENEN ZİYARETÇİ SAYAÇ KUTUSU STİLİ */
+        /* ZİYARETÇİ SAYAÇ ROZETİ STİLİ */
         .visitor-counter-badge {
             display: inline-flex;
             align-items: center;
@@ -1160,11 +1160,11 @@
             <span lang="en">What Should I Pick?</span>
         </h3>
 
-        <!-- GİRİŞ SAYAÇ ROZETİ -->
+        <!-- GİRİŞ SAYAÇ ROZETİ (ID: ziyaret-sayaci İLE EŞLEŞTİRİLDİ) -->
         <div class="visitor-counter-badge">
             <span>👁️</span>
-            <span lang="tr">Toplam Ziyaret: <strong id="visitCount">...</strong></span>
-            <span lang="en">Total Visits: <strong id="visitCountEn">...</strong></span>
+            <span lang="tr">Toplam Ziyaret: <strong id="ziyaret-sayaci">...</strong></span>
+            <span lang="en">Total Visits: <strong id="ziyaret-sayaci-en">...</strong></span>
         </div>
 
         <p style="font-size: 0.8rem; color: #6b7280; margin-top:8px;">
@@ -1191,21 +1191,24 @@
 </div>
 
 <script>
-    // ZİYARETÇİ SAYAÇ SİSTEMİ (CountAPI)
-    const SITE_NAMESPACE = "balkan_cafe_menu_16";
-    const COUNTER_KEY = "wheel_page_visits";
-
-    function initVisitorCounter() {
-        fetch(`https://api.countapi.xyz/hit/${SITE_NAMESPACE}/${COUNTER_KEY}`)
+    // İSTEDİĞİNİZ SAYAÇ FONKSİYONU VE ENTEGRASYONU
+    function ziyaretciSayisiniGetir() {
+        fetch('https://api.countapi.xyz/hit/balkancafe16-menu/visits')
             .then(res => res.json())
-            .then(data => {
-                document.getElementById('visitCount').innerText = data.value;
-                document.getElementById('visitCountEn').innerText = data.value;
+            .then(res => {
+                // Hem Türkçe hem İngilizce kısımdaki sayaç elemanına değeri aktarır
+                const counterElement = document.getElementById('ziyaret-sayaci');
+                const counterElementEn = document.getElementById('ziyaret-sayaci-en');
+                
+                if (counterElement) counterElement.innerText = res.value;
+                if (counterElementEn) counterElementEn.innerText = res.value;
             })
-            .catch(() => {
-                // Hata veya engel durumunda varsayılan gösterim
-                document.getElementById('visitCount').innerText = "1";
-                document.getElementById('visitCountEn').innerText = "1";
+            .catch(err => {
+                console.error("Sayaç yüklenemedi:", err);
+                const counterElement = document.getElementById('ziyaret-sayaci');
+                const counterElementEn = document.getElementById('ziyaret-sayaci-en');
+                if (counterElement) counterElement.innerText = "1";
+                if (counterElementEn) counterElementEn.innerText = "1";
             });
     }
 
@@ -1231,16 +1234,17 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // SAYFA YÜKLENDİĞİNDE ÇALIŞACAK ETKİLEŞİMLER
+    window.addEventListener('DOMContentLoaded', () => {
         const savedLang = localStorage.getItem('selectedLang');
         if (savedLang) {
             setLanguage(savedLang);
         }
-        // Sayfa yüklendiğinde sayacı tetikle
-        initVisitorCounter();
+        // İlettiğiniz ziyaretçi sayacı fonksiyonunu tetikler
+        ziyaretciSayisiniGetir();
     });
 
-    // GÜNCELLENMİŞ ÇARK SİSTEMİ VERİLERİ (Tüm Menü Ürünleri)
+    // ÇARK SİSTEMİ VERİLERİ
     const wheelData = {
         hot: {
             trName: "Sıcaklar", enName: "Hot Drinks",
@@ -1366,7 +1370,6 @@
             ctx.textAlign = "right";
             ctx.fillStyle = (index % sliceColors.length > 2) ? "#ffffff" : "#1f2937";
             
-            // Dilim sayısına göre dinamik font boyutu ayarlama
             const fontSize = numSlices > 15 ? "8px" : (numSlices > 10 ? "10px" : "11px");
             ctx.font = `bold ${fontSize} -apple-system, BlinkMacSystemFont, Segoe UI`;
             
