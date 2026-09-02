@@ -1140,8 +1140,8 @@
     <div class="wheel-card">
         <span class="close-btn" onclick="toggleWheelModal(false)">&times;</span>
         <h3 style="color:#b45309;">
-            <span lang="tr">Ne İçsem?</span>
-            <span lang="en">What Should I Drink?</span>
+            <span lang="tr">Ne Seçsem?</span>
+            <span lang="en">What Should I Pick?</span>
         </h3>
         <p style="font-size: 0.8rem; color: #6b7280; margin-top:4px;">
             <span lang="tr">Kategori seç ve çarkı çevir!</span>
@@ -1196,34 +1196,71 @@
         }
     });
 
-    // ÇARK SİSTEMİ VERİLERİ (Menüdeki ürünlerden çekilmiştir)
+    // GÜNCELLENMİŞ ÇARK SİSTEMİ VERİLERİ (Tüm Menü Ürünleri)
     const wheelData = {
         hot: {
             trName: "Sıcaklar", enName: "Hot Drinks",
             items: [
                 { tr: "Çay", en: "Tea" },
+                { tr: "Büyük Fincan Çay", en: "Large Mug Tea" },
                 { tr: "Türk Kahvesi", en: "Turkish Coffee" },
+                { tr: "Double Türk Kahvesi", en: "Double Turkish Coffee" },
                 { tr: "Espresso", en: "Espresso" },
+                { tr: "Sütlü Espresso", en: "Espresso with Milk" },
+                { tr: "Nescafe", en: "Nescafe" },
+                { tr: "Sütlü Nescafe", en: "Nescafe with Milk" },
+                { tr: "Sıcak Süt", en: "Hot Milk" },
+                { tr: "Ballı Süt", en: "Hot Milk with Honey" },
                 { tr: "Americano", en: "Americano" },
+                { tr: "Sütlü Americano", en: "Americano with Milk" },
                 { tr: "Cappuccino", en: "Cappuccino" },
-                { tr: "Latte", en: "Latte" },
+                { tr: "Latte (Spanish, Çilekli, Karamelli...)", en: "Latte (Spanish, Strawberry...)" },
+                { tr: "Mocha", en: "Mocha" },
+                { tr: "White Chocolate Mocha", en: "White Chocolate Mocha" },
                 { tr: "Sıcak Çikolata", en: "Hot Chocolate" },
-                { tr: "Bitki Çayı", en: "Herbal Tea" },
-                { tr: "Sütlü Sahlep", en: "Sahlep" }
+                { tr: "Beyaz Sıcak Çikolata", en: "White Hot Chocolate" },
+                { tr: "Bitki Çayı (Ihlamur, Papatya, Kış Çayı...)", en: "Herbal Tea (Linden, Chamomile...)" },
+                { tr: "Sütlü Sahlep", en: "Sahlep with Milk" },
+                { tr: "Oralet Çay Bardağı", en: "Oralet (Small Glass)" },
+                { tr: "Oralet Büyük Fincan", en: "Oralet (Large Mug)" },
+                { tr: "French Press Filtre Kahve", en: "French Press Filter Coffee" },
+                { tr: "Sütlü Filtre Kahve", en: "Filter Coffee with Milk" }
             ]
         },
         cold: {
             trName: "Soğuklar", enName: "Cold Drinks",
             items: [
-                { tr: "Iced Latte", en: "Iced Latte" },
-                { tr: "Ev Yapımı Limonata", en: "Homemade Lemonade" },
+                { tr: "Iced Latte (Spanish, Çilekli...)", en: "Iced Latte (Spanish, Strawberry...)" },
+                { tr: "Kuzu Kulağı", en: "Sorrel Drink" },
+                { tr: "Iced Orange Espresso", en: "Iced Orange Espresso" },
+                { tr: "Patlayan Şekerli Milkshake", en: "Popping Candy Milkshake" },
+                { tr: "Limonata (Ev Yapımı)", en: "Homemade Lemonade" },
+                { tr: "Iced White Mocha", en: "Iced White Mocha" },
                 { tr: "Iced Mocha", en: "Iced Mocha" },
                 { tr: "Iced Americano", en: "Iced Americano" },
-                { tr: "Frozen", en: "Frozen" },
+                { tr: "Sihirli İçecek", en: "Magic Drink" },
+                { tr: "Frozen (Karpuz, Orman Meyveli...)", en: "Frozen (Watermelon, Forest Fruit...)" },
+                { tr: "Dondurmalı Frappe", en: "Frappe with Ice Cream" },
+                { tr: "Frappe (Sütlü, Sade)", en: "Frappe (Milky, Plain)" },
                 { tr: "Cool Lime", en: "Cool Lime" },
                 { tr: "Berry Hibiscus", en: "Berry Hibiscus" },
-                { tr: "Milkshake", en: "Milkshake" },
-                { tr: "Churchill", en: "Churchill" }
+                { tr: "Milkshake (Çilekli, Karamelli...)", en: "Milkshake (Strawberry...)" },
+                { tr: "Churchill", en: "Churchill" },
+                { tr: "İtalyan Soda", en: "Italian Soda" },
+                { tr: "Affogato", en: "Affogato" },
+                { tr: "Galaxy Purple", en: "Galaxy Purple" }
+            ]
+        },
+        dessert: {
+            trName: "Tatlılar", enName: "Desserts",
+            items: [
+                { tr: "Waffle", en: "Waffle" },
+                { tr: "Sufle", en: "Chocolate Soufflé" },
+                { tr: "Krem Karamel", en: "Crème Caramel" },
+                { tr: "Dilim Kek", en: "Slice of Cake" },
+                { tr: "Ballı Tarçınlı Kurabiye", en: "Honey Cinnamon Cookie" },
+                { tr: "Berliner", en: "Berliner" },
+                { tr: "Dondurma Çeşitleri", en: "Ice Cream Flavors" }
             ]
         }
     };
@@ -1276,7 +1313,7 @@
             ctx.fillStyle = sliceColors[index % sliceColors.length];
             ctx.fill();
             ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1;
             ctx.stroke();
 
             ctx.save();
@@ -1284,9 +1321,17 @@
             ctx.rotate(startAngle + sliceAngle / 2);
             ctx.textAlign = "right";
             ctx.fillStyle = (index % sliceColors.length > 2) ? "#ffffff" : "#1f2937";
-            ctx.font = "bold 11px -apple-system, BlinkMacSystemFont, Segoe UI";
-            const label = isEn ? item.en : item.tr;
-            ctx.fillText(label, 115, 4);
+            
+            // Dilim sayısına göre dinamik font boyutu ayarlama
+            const fontSize = numSlices > 15 ? "8px" : (numSlices > 10 ? "10px" : "11px");
+            ctx.font = `bold ${fontSize} -apple-system, BlinkMacSystemFont, Segoe UI`;
+            
+            let label = isEn ? item.en : item.tr;
+            if (label.length > 15) {
+                label = label.substring(0, 13) + '..';
+            }
+            
+            ctx.fillText(label, 118, 3);
             ctx.restore();
         });
     }
@@ -1330,7 +1375,7 @@
         const winningIndex = Math.floor((360 - (actualDegrees % 360) + 270) % 360 / sliceDegrees);
         
         const winner = isEn ? items[winningIndex].en : items[winningIndex].tr;
-        const resultText = isEn ? `Lucky Choice: ${winner}! 🍹` : `Şansına Çıkan: ${winner}! 🍹`;
+        const resultText = isEn ? `Lucky Choice: ${winner}! 🎉` : `Şansına Çıkan: ${winner}! 🎉`;
         
         document.getElementById('resultText').innerText = resultText;
         document.getElementById('resultBox').style.display = 'block';
