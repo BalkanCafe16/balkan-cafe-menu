@@ -1219,26 +1219,7 @@
     }
 
     function playTickSound() {
-        try {
-            initAudio();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.04);
-            
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.04);
-        } catch (e) {
-            // Ses üretimi engellenirse sessizce devam et
-        }
+        // Dönme tıkırtı sesi kaldırıldı
     }
 
     function playWinSound() {
@@ -1342,7 +1323,6 @@
     let currentCategory = "hot";
     let isSpinning = false;
     let currentAngle = 0;
-    let lastSliceIndex = -1;
 
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
@@ -1417,13 +1397,10 @@
         document.getElementById('resultBox').style.display = 'none';
 
         const items = wheelData[currentCategory].items;
-        const numSlices = items.length;
-        const sliceDegrees = 360 / numSlices;
 
         const spinAngle = Math.floor(Math.random() * 360) + 1440;
         const duration = 4000;
         const start = performance.now();
-        lastSliceIndex = -1;
 
         function animate(time) {
             const elapsed = time - start;
@@ -1432,15 +1409,6 @@
             
             currentAngle = (spinAngle * easeOut * Math.PI) / 180;
             drawWheel();
-
-            // Dilim değiştiğinde tikleme sesi çal
-            const actualDegrees = (currentAngle * 180 / Math.PI) % 360;
-            const currentSliceIndex = Math.floor((360 - (actualDegrees % 360) + 270) % 360 / sliceDegrees);
-            
-            if (currentSliceIndex !== lastSliceIndex) {
-                playTickSound();
-                lastSliceIndex = currentSliceIndex;
-            }
 
             if (progress < 1) {
                 requestAnimationFrame(animate);
