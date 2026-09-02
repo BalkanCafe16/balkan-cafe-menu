@@ -340,6 +340,19 @@
             color: #065f46;
         }
 
+        /* ÇARK SAYAÇ ALANI STİLİ */
+        .wheel-counter {
+            margin-top: 12px;
+            font-size: 0.82rem;
+            color: #92400e;
+            background: #fffbeb;
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid #fef3c7;
+            display: inline-block;
+            font-weight: 600;
+        }
+
         /* DİL GİZLEME / GÖSTERME KURALLARI */
         [lang="en"] {
             display: none;
@@ -1139,11 +1152,11 @@
 <div class="modal-overlay" id="wheelModal">
     <div class="wheel-card">
         <span class="close-btn" onclick="toggleWheelModal(false)">&times;</span>
-        <h3 style="color:#b45309;">
+        <h3 style="color:#b45309; margin-bottom: 2px;">
             <span lang="tr">Ne Seçsem?</span>
             <span lang="en">What Should I Pick?</span>
         </h3>
-        <p style="font-size: 0.8rem; color: #6b7280; margin-top:4px;">
+        <p style="font-size: 0.8rem; color: #6b7280; margin-top:2px; margin-bottom: 8px;">
             <span lang="tr">Kategori seç ve çarkı çevir!</span>
             <span lang="en">Pick a category and spin!</span>
         </p>
@@ -1160,6 +1173,15 @@
             <span lang="en">Spin!</span>
         </button>
 
+        <!-- SAYAÇ ALANI -->
+        <div>
+            <div class="wheel-counter">
+                🔥 <span lang="tr">Çark toplam</span><span lang="en">Spun total</span> 
+                <span id="spinCountDisplay" style="font-size: 0.95rem; font-weight: 800; color: #d97706;">...</span> 
+                <span lang="tr">kez döndürüldü</span><span lang="en">times</span>
+            </div>
+        </div>
+
         <div class="result-box" id="resultBox">
             <h4 id="resultText" style="margin: 0; font-size: 1rem;"></h4>
         </div>
@@ -1167,6 +1189,37 @@
 </div>
 
 <script>
+    // SAYAÇ İÇİN BİLGİ VERİTABANI (Firebase REST API)
+    const counterApiUrl = "https://balkan-cafe-menu-default-rtdb.firebaseio.com/spins.json";
+
+    async function fetchSpinCount() {
+        try {
+            const response = await fetch(counterApiUrl);
+            const data = await response.json();
+            const count = data ? data : 0;
+            document.getElementById('spinCountDisplay').innerText = count;
+            return count;
+        } catch (e) {
+            document.getElementById('spinCountDisplay').innerText = '0';
+            return 0;
+        }
+    }
+
+    async function incrementSpinCount() {
+        try {
+            const currentCount = await fetchSpinCount();
+            const newCount = currentCount + 1;
+            await fetch(counterApiUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newCount)
+            });
+            document.getElementById('spinCountDisplay').innerText = newCount;
+        } catch (e) {
+            console.error("Sayaç güncellenemedi", e);
+        }
+    }
+
     // DİL YÖNETİMİ
     function setLanguage(lang) {
         const btnTr = document.getElementById('btn-tr');
@@ -1342,6 +1395,9 @@
         document.getElementById('spinBtn').disabled = true;
         document.getElementById('resultBox').style.display = 'none';
 
+        // Sayacı artır
+        incrementSpinCount();
+
         const items = wheelData[currentCategory].items;
         const spinAngle = Math.floor(Math.random() * 360) + 1440;
         const duration = 4000;
@@ -1384,6 +1440,7 @@
     function toggleWheelModal(show) {
         document.getElementById('wheelModal').classList.toggle('active', show);
         if (show) {
+            fetchSpinCount();
             initTabs();
             drawWheel();
         }
