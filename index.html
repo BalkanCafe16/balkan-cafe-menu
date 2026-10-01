@@ -85,15 +85,17 @@
         .logo-container {
             text-align: center;
             margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
         }
         .site-logo {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            object-fit: contain;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border: 3px solid #d97706;
-            background-color: #000; /* Koyu logo arkaplanı için uyumlu ton */
+            background-color: #ffffff;
         }
 
         h1 {
@@ -393,9 +395,10 @@
         </div>
     </div>
 
-    <!-- LOGO ALANI (Yeni Logonuz Eklendi) -->
+    <!-- LOGO ALANI -->
     <div class="logo-container">
-        <img src="balkan-logo.png" alt="Balkan Cafe Logo" class="site-logo">
+        <img src="balkan-logo.png" alt="Balkan Cafe Logo" class="site-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
+        <div id="logo-fallback" style="display:none; font-weight:bold; color:#d97706; font-size:1.5rem; padding:20px;">☕ Balkan Cafe</div>
     </div>
 
     <h1>BALKAN CAFE</h1>
@@ -1213,7 +1216,6 @@
         }
     }
 
-    // SAYFA YÜKLENDİĞİNDE ÇALIŞACAK ETKİLEŞİMLER
     window.addEventListener('DOMContentLoaded', () => {
         const savedLang = localStorage.getItem('selectedLang');
         if (savedLang) {
@@ -1221,9 +1223,7 @@
         }
     });
 
-    // SES EFEKTİ SİSTEMİ (Web Audio API)
     let audioCtx = null;
-
     function initAudio() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1237,30 +1237,22 @@
         try {
             initAudio();
             const now = audioCtx.currentTime;
-            
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            const notes = [523.25, 659.25, 783.99, 1046.50];
             notes.forEach((freq, idx) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                
                 osc.type = 'sine';
                 osc.frequency.value = freq;
-                
                 gain.gain.setValueAtTime(0.2, now + idx * 0.08);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
-                
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                
                 osc.start(now + idx * 0.08);
                 osc.stop(now + idx * 0.08 + 0.2);
             });
-        } catch (e) {
-            // Ses üretimi engellenirse sessizce devam et
-        }
+        } catch (e) {}
     }
 
-    // ÇARK SİSTEMİ VERİLERİ
     const wheelData = {
         hot: {
             trName: "Sıcaklar", enName: "Hot Drinks",
@@ -1279,15 +1271,14 @@
                 { tr: "Americano", en: "Americano" },
                 { tr: "Sütlü Americano", en: "Americano with Milk" },
                 { tr: "Cappuccino", en: "Cappuccino" },
-                { tr: "Latte (Spanish, Çilekli, Karamelli...)", en: "Latte (Spanish, Strawberry...)" },
+                { tr: "Latte", en: "Latte" },
                 { tr: "Mocha", en: "Mocha" },
                 { tr: "White Chocolate Mocha", en: "White Chocolate Mocha" },
                 { tr: "Sıcak Çikolata", en: "Hot Chocolate" },
                 { tr: "Beyaz Sıcak Çikolata", en: "White Hot Chocolate" },
-                { tr: "Bitki Çayı (Ihlamur, Papatya, Kış Çayı...)", en: "Herbal Tea (Linden, Chamomile...)" },
+                { tr: "Bitki Çayı", en: "Herbal Tea" },
                 { tr: "Sütlü Sahlep", en: "Sahlep with Milk" },
-                { tr: "Oralet Çay Bardağı", en: "Oralet (Small Glass)" },
-                { tr: "Oralet Büyük Fincan", en: "Oralet (Large Mug)" },
+                { tr: "Oralet", en: "Oralet" },
                 { tr: "French Press Filtre Kahve", en: "French Press Filter Coffee" },
                 { tr: "Sütlü Filtre Kahve", en: "Filter Coffee with Milk" }
             ]
@@ -1295,21 +1286,21 @@
         cold: {
             trName: "Soğuklar", enName: "Cold Drinks",
             items: [
-                { tr: "Iced Latte (Spanish, Çilekli...)", en: "Iced Latte (Spanish, Strawberry...)" },
+                { tr: "Iced Latte", en: "Iced Latte" },
                 { tr: "Kuzu Kulağı", en: "Sorrel Drink" },
                 { tr: "Iced Orange Espresso", en: "Iced Orange Espresso" },
                 { tr: "Patlayan Şekerli Milkshake", en: "Popping Candy Milkshake" },
-                { tr: "Limonata (Ev Yapımı)", en: "Homemade Lemonade" },
+                { tr: "Limonata", en: "Homemade Lemonade" },
                 { tr: "Iced White Mocha", en: "Iced White Mocha" },
                 { tr: "Iced Mocha", en: "Iced Mocha" },
                 { tr: "Iced Americano", en: "Iced Americano" },
                 { tr: "Sihirli İçecek", en: "Magic Drink" },
-                { tr: "Frozen (Karpuz, Orman Meyveli...)", en: "Frozen (Watermelon, Forest Fruit...)" },
+                { tr: "Frozen", en: "Frozen" },
                 { tr: "Dondurmalı Frappe", en: "Frappe with Ice Cream" },
-                { tr: "Frappe (Sütlü, Sade)", en: "Frappe (Milky, Plain)" },
+                { tr: "Frappe", en: "Frappe" },
                 { tr: "Cool Lime", en: "Cool Lime" },
                 { tr: "Berry Hibiscus", en: "Berry Hibiscus" },
-                { tr: "Milkshake (Çilekli, Karamelli...)", en: "Milkshake (Strawberry...)" },
+                { tr: "Milkshake", en: "Milkshake" },
                 { tr: "Churchill", en: "Churchill" },
                 { tr: "İtalyan Soda", en: "Italian Soda" },
                 { tr: "Affogato", en: "Affogato" },
@@ -1325,7 +1316,7 @@
                 { tr: "Dilim Kek", en: "Slice of Cake" },
                 { tr: "Ballı Tarçınlı Kurabiye", en: "Honey Cinnamon Cookie" },
                 { tr: "Berliner", en: "Berliner" },
-                { tr: "Dondurma Çeşitleri", en: "Ice Cream Flavors" }
+                { tr: "Dondurma", en: "Ice Cream" }
             ]
         }
     };
@@ -1408,7 +1399,6 @@
         document.getElementById('resultBox').style.display = 'none';
 
         const items = wheelData[currentCategory].items;
-
         const spinAngle = Math.floor(Math.random() * 360) + 1440;
         const duration = 4000;
         const start = performance.now();
