@@ -85,17 +85,12 @@
         .logo-container {
             text-align: center;
             margin-bottom: 10px;
-            display: flex;
-            justify-content: center;
         }
-        .site-logo {
+        .logo-svg {
             width: 130px;
             height: 130px;
             border-radius: 50%;
-            object-fit: contain;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 3px solid #d97706;
-            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
         }
 
         h1 {
@@ -397,8 +392,15 @@
 
     <!-- LOGO ALANI -->
     <div class="logo-container">
-        <img src="balkan-logo.png" alt="Balkan Cafe Logo" class="site-logo" onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';">
-        <div id="logo-fallback" style="display:none; font-weight:bold; color:#d97706; font-size:1.5rem; padding:20px;">☕ Balkan Cafe</div>
+        <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="95" fill="#fef3c7" stroke="#d97706" stroke-width="5"/>
+            <path d="M60 110 C 60 140, 140 140, 140 110 L 140 90 L 60 90 Z" fill="#b45309"/>
+            <path d="M140 95 C 160 95, 160 120, 140 120" fill="none" stroke="#b45309" stroke-width="6"/>
+            <path d="M80 80 Q 85 65, 80 50" fill="none" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+            <path d="M100 80 Q 105 65, 100 50" fill="none" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+            <path d="M120 80 Q 125 65, 120 50" fill="none" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+            <path d="M50 145 L 150 145" stroke="#b45309" stroke-width="5" stroke-linecap="round"/>
+        </svg>
     </div>
 
     <h1>BALKAN CAFE</h1>
@@ -1216,6 +1218,7 @@
         }
     }
 
+    // SAYFA YÜKLENDİĞİNDE ÇALIŞACAK ETKİLEŞİMLER
     window.addEventListener('DOMContentLoaded', () => {
         const savedLang = localStorage.getItem('selectedLang');
         if (savedLang) {
@@ -1223,7 +1226,9 @@
         }
     });
 
+    // SES EFEKTİ SİSTEMİ (Web Audio API)
     let audioCtx = null;
+
     function initAudio() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1237,22 +1242,30 @@
         try {
             initAudio();
             const now = audioCtx.currentTime;
-            const notes = [523.25, 659.25, 783.99, 1046.50];
+            
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
             notes.forEach((freq, idx) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
+                
                 osc.type = 'sine';
                 osc.frequency.value = freq;
+                
                 gain.gain.setValueAtTime(0.2, now + idx * 0.08);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+                
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
+                
                 osc.start(now + idx * 0.08);
                 osc.stop(now + idx * 0.08 + 0.2);
             });
-        } catch (e) {}
+        } catch (e) {
+            // Ses üretimi engellenirse sessizce devam et
+        }
     }
 
+    // ÇARK SİSTEMİ VERİLERİ
     const wheelData = {
         hot: {
             trName: "Sıcaklar", enName: "Hot Drinks",
@@ -1271,14 +1284,15 @@
                 { tr: "Americano", en: "Americano" },
                 { tr: "Sütlü Americano", en: "Americano with Milk" },
                 { tr: "Cappuccino", en: "Cappuccino" },
-                { tr: "Latte", en: "Latte" },
+                { tr: "Latte (Spanish, Çilekli, Karamelli...)", en: "Latte (Spanish, Strawberry...)" },
                 { tr: "Mocha", en: "Mocha" },
                 { tr: "White Chocolate Mocha", en: "White Chocolate Mocha" },
                 { tr: "Sıcak Çikolata", en: "Hot Chocolate" },
                 { tr: "Beyaz Sıcak Çikolata", en: "White Hot Chocolate" },
-                { tr: "Bitki Çayı", en: "Herbal Tea" },
+                { tr: "Bitki Çayı (Ihlamur, Papatya, Kış Çayı...)", en: "Herbal Tea (Linden, Chamomile...)" },
                 { tr: "Sütlü Sahlep", en: "Sahlep with Milk" },
-                { tr: "Oralet", en: "Oralet" },
+                { tr: "Oralet Çay Bardağı", en: "Oralet (Small Glass)" },
+                { tr: "Oralet Büyük Fincan", en: "Oralet (Large Mug)" },
                 { tr: "French Press Filtre Kahve", en: "French Press Filter Coffee" },
                 { tr: "Sütlü Filtre Kahve", en: "Filter Coffee with Milk" }
             ]
@@ -1286,21 +1300,21 @@
         cold: {
             trName: "Soğuklar", enName: "Cold Drinks",
             items: [
-                { tr: "Iced Latte", en: "Iced Latte" },
+                { tr: "Iced Latte (Spanish, Çilekli...)", en: "Iced Latte (Spanish, Strawberry...)" },
                 { tr: "Kuzu Kulağı", en: "Sorrel Drink" },
                 { tr: "Iced Orange Espresso", en: "Iced Orange Espresso" },
                 { tr: "Patlayan Şekerli Milkshake", en: "Popping Candy Milkshake" },
-                { tr: "Limonata", en: "Homemade Lemonade" },
+                { tr: "Limonata (Ev Yapımı)", en: "Homemade Lemonade" },
                 { tr: "Iced White Mocha", en: "Iced White Mocha" },
                 { tr: "Iced Mocha", en: "Iced Mocha" },
                 { tr: "Iced Americano", en: "Iced Americano" },
                 { tr: "Sihirli İçecek", en: "Magic Drink" },
-                { tr: "Frozen", en: "Frozen" },
+                { tr: "Frozen (Karpuz, Orman Meyveli...)", en: "Frozen (Watermelon, Forest Fruit...)" },
                 { tr: "Dondurmalı Frappe", en: "Frappe with Ice Cream" },
-                { tr: "Frappe", en: "Frappe" },
+                { tr: "Frappe (Sütlü, Sade)", en: "Frappe (Milky, Plain)" },
                 { tr: "Cool Lime", en: "Cool Lime" },
                 { tr: "Berry Hibiscus", en: "Berry Hibiscus" },
-                { tr: "Milkshake", en: "Milkshake" },
+                { tr: "Milkshake (Çilekli, Karamelli...)", en: "Milkshake (Strawberry...)" },
                 { tr: "Churchill", en: "Churchill" },
                 { tr: "İtalyan Soda", en: "Italian Soda" },
                 { tr: "Affogato", en: "Affogato" },
@@ -1316,7 +1330,7 @@
                 { tr: "Dilim Kek", en: "Slice of Cake" },
                 { tr: "Ballı Tarçınlı Kurabiye", en: "Honey Cinnamon Cookie" },
                 { tr: "Berliner", en: "Berliner" },
-                { tr: "Dondurma", en: "Ice Cream" }
+                { tr: "Dondurma Çeşitleri", en: "Ice Cream Flavors" }
             ]
         }
     };
@@ -1399,6 +1413,7 @@
         document.getElementById('resultBox').style.display = 'none';
 
         const items = wheelData[currentCategory].items;
+
         const spinAngle = Math.floor(Math.random() * 360) + 1440;
         const duration = 4000;
         const start = performance.now();
